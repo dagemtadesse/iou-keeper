@@ -1,7 +1,7 @@
 import { Google } from "@/components/icons/Google";
 import { Logo } from "@/components/icons/Logo";
-import { View, Pressable, Text, } from "react-native";
-import { StatusBar } from 'expo-status-bar';
+import { View, Pressable, Text } from "react-native";
+import { StatusBar } from "expo-status-bar";
 
 export default function Index() {
   return (
@@ -16,10 +16,15 @@ export default function Index() {
       <Text style={styles.heroText}>Welcome Back!</Text>
       <Text style={styles.heroDescription}>Please log in to continue.</Text>
 
-      <Pressable style={styles.buttonContainer}>
-        <Google />
-        <Text style={styles.buttonText}>login with Google</Text>
-      </Pressable>
+      <View style={styles.buttonShape}>
+        <Pressable
+          style={styles.buttonContainer}
+          android_ripple={{ color: "#fff" }}
+        >
+          <Google />
+          <Text style={styles.buttonText}>login with Google</Text>
+        </Pressable>
+      </View>
     </View>
   );
 }
@@ -30,7 +35,7 @@ const styles = {
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#1e1e1e",
-    padding: 16
+    padding: 16,
   },
   logoContainer: { flexDirection: "row", alignItems: "center", gap: 12 },
   logoText: {
@@ -53,16 +58,21 @@ const styles = {
     marginTop: 8,
     fontWeight: "300",
   },
+  buttonShape: {
+    borderRadius: 1000,
+    overflow: "hidden",
+    marginTop: 64,
+  },
   buttonText: { color: "#fff", fontSize: 14, lineHeight: 20, fontWeight: 600 },
   buttonContainer: {
     backgroundColor: "#3A8F4F",
     paddingVertical: 12,
     paddingHorizontal: 24,
     borderRadius: 1000,
-    marginTop: 64,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
     gap: 8,
+    overflow: "hidden",
   },
 } as const;
