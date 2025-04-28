@@ -11,23 +11,45 @@ import { Header } from "@/components/layout/header";
 import { typography } from "@/components/theme/typography";
 import { FilledButton } from "@/components/common/Button";
 import { Colors } from "@/components/theme/color";
+import { supabase } from "@/lib/supabase";
+import { useEffect } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { StorageKey } from "@/constant/storage-key";
+import { router } from "expo-router";
 
 const schema = yup
   .object({
-    otp: yup.string().length(6).required()
+    email: yup.string().email().required(),
+    otp: yup.string().length(6).required(),
   })
   .required();
 
 export default function OtpScreen() {
-  const {
-    handleSubmit,
-    control,
-    formState: { errors },
-  } = useForm({
+  const { handleSubmit, control, setValue } = useForm({
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = (data: { otp: string }) => {};
+  useEffect(() => {
+    (async () => {
+      const email = await AsyncStorage.getItem(StorageKey.AUTH_EMAIL);
+      if (!email) router.push("/");
+      else setValue("email", email);
+    })();
+  }, []);
+
+  const onSubmit = async ({ email, otp }: { otp: string; email: string }) => {
+    try {
+      await supabase.auth.verifyOtp({
+        email,
+        token: otp,
+        type: "email",
+      });
+
+      router.replace("/")
+    } catch (error) {
+      console.error("Error verifying OTP:", error);
+    }
+  };
 
   return (
     <SafeAreaView style={{ flex: 1 }}>

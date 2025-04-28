@@ -1,4 +1,5 @@
-import { View, Text } from "react-native";
+import { useEffect, useState } from "react";
+import { View, Text, ActivityIndicator } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -7,12 +8,15 @@ import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
+import { supabase } from "@/lib/supabase";
 import { Header } from "@/components/layout/header";
 import { typography } from "@/components/theme/typography";
 import { Colors } from "@/components/theme/color";
 import { RightArrow } from "@/components/icons/RightArrow";
 import { CustomInput } from "@/components/common/CustomInput";
 import { FilledButton } from "@/components/common/Button";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { StorageKey } from "@/constant/storage-key";
 
 const schema = yup
   .object({
@@ -26,11 +30,32 @@ export default function Index() {
   const {
     handleSubmit,
     control,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm({
     resolver: yupResolver(schema),
   });
-  const onSubmit = (data: { email: string }) => router.push("/otp");
+
+  useEffect(() => {
+    (async () => {
+      const email = await AsyncStorage.getItem(StorageKey.AUTH_EMAIL);
+      if (email) router.push("/otp");
+    })();
+  }, []);
+
+  const onSubmit = async (data: { email: string }) => {
+    try {
+      AsyncStorage.setItem(StorageKey.AUTH_EMAIL, data.email);
+      const { error } = await supabase.auth.signInWithOtp({
+        email: data.email,
+      });
+
+      if (error) {
+        throw error;
+      }
+
+      router.push("/otp");
+    } catch (error) {}
+  };
 
   return (
     <SafeAreaView style={styles.pageContainer}>
@@ -63,6 +88,7 @@ export default function Index() {
                 onChangeText={onChange}
                 value={value}
                 isError={!!errors.email}
+                autoCapitalize="none"
               />
             )}
             name="email"
@@ -82,8 +108,22 @@ export default function Index() {
       {/* footer */}
       <View style={{ paddingHorizontal: 16, paddingBottom: 16 }}>
         <FilledButton pressableProps={{ onPress: handleSubmit(onSubmit) }}>
-          <Text style={typography.label.large}>Next</Text>
-          <RightArrow />
+          {isSubmitting ? (
+            <View
+              style={{
+                height: 24,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <ActivityIndicator color={Colors.onPrimary} />
+            </View>
+          ) : (
+            <>
+              <Text style={typography.label.large}>Next</Text>
+              <RightArrow />
+            </>
+          )}
         </FilledButton>
       </View>
     </SafeAreaView>
