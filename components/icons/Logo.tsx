@@ -1,4 +1,4 @@
-import Svg, { Circle, Rect, Path, G, Defs, ClipPath } from "react-native-svg";
+import Svg, { Rect, Path, G, Defs, ClipPath } from "react-native-svg";
 
 export const Logo = () => {
   return (

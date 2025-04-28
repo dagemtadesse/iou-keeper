@@ -1,48 +1,98 @@
-import { Google } from "@/components/icons/Google";
-import { Logo } from "@/components/icons/Logo";
-import { View, Pressable, Text } from "react-native";
+import { View, Text } from "react-native";
 import { StatusBar } from "expo-status-bar";
+import { useRouter } from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
+
+import { useForm, Controller } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+
+import { Header } from "@/components/layout/header";
+import { typography } from "@/components/theme/typography";
+import { Colors } from "@/components/theme/color";
+import { RightArrow } from "@/components/icons/RightArrow";
+import { CustomInput } from "@/components/common/CustomInput";
+import { FilledButton } from "@/components/common/Button";
+
+const schema = yup
+  .object({
+    email: yup.string().email().required(),
+  })
+  .required();
 
 export default function Index() {
+  const router = useRouter();
+
+  const {
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
+  const onSubmit = (data: { email: string }) => router.push("/otp");
+
   return (
-    <View style={styles.pageContainer}>
+    <SafeAreaView style={styles.pageContainer}>
       <StatusBar style={"light"} />
 
-      <View style={styles.logoContainer}>
-        <Logo />
-        <Text style={styles.logoText}>IOU's</Text>
-      </View>
-
-      <Text style={styles.heroText}>Welcome Back!</Text>
-      <Text style={styles.heroDescription}>Please log in to continue.</Text>
-
-      <View style={styles.buttonShape}>
-        <Pressable
-          style={styles.buttonContainer}
-          android_ripple={{ color: "#fff" }}
+      <Header />
+      {/* content */}
+      <View style={{ paddingHorizontal: 12, flex: 1, paddingVertical: 16 }}>
+        <Text style={[typography.display.small]}>Let’s get Started</Text>
+        <Text
+          style={[typography.body.medium, { fontWeight: 300, marginTop: 8 }]}
         >
-          <Google />
-          <Text style={styles.buttonText}>login with Google</Text>
-        </Pressable>
+          Please, enter your email to setup your account
+        </Text>
+
+        <View style={{ marginTop: 32 }}>
+          <Text
+            style={[typography.body.large, { marginLeft: 4, marginBottom: 12 }]}
+          >
+            Email
+          </Text>
+          <Controller
+            control={control}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <CustomInput
+                placeholder="Enter your email"
+                enterKeyHint="next"
+                inputMode="email"
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+                isError={!!errors.email}
+              />
+            )}
+            name="email"
+          />
+          {errors.email && (
+            <Text
+              style={[
+                typography.body.small,
+                { color: Colors.error, marginTop: 4, marginLeft: 4 },
+              ]}
+            >
+              {errors.email.message}
+            </Text>
+          )}
+        </View>
       </View>
-    </View>
+      {/* footer */}
+      <View style={{ paddingHorizontal: 16, paddingBottom: 16 }}>
+        <FilledButton pressableProps={{ onPress: handleSubmit(onSubmit) }}>
+          <Text style={typography.label.large}>Next</Text>
+          <RightArrow />
+        </FilledButton>
+      </View>
+    </SafeAreaView>
   );
 }
 
 const styles = {
   pageContainer: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#1e1e1e",
-    padding: 16,
-  },
-  logoContainer: { flexDirection: "row", alignItems: "center", gap: 12 },
-  logoText: {
-    color: "#fff",
-    fontSize: 28,
-    lineHeight: 36,
-    fontWeight: 400,
   },
   heroText: {
     color: "#fff",
@@ -59,20 +109,6 @@ const styles = {
     fontWeight: "300",
   },
   buttonShape: {
-    borderRadius: 1000,
-    overflow: "hidden",
     marginTop: 64,
-  },
-  buttonText: { color: "#fff", fontSize: 14, lineHeight: 20, fontWeight: 600 },
-  buttonContainer: {
-    backgroundColor: "#3A8F4F",
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 1000,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 8,
-    overflow: "hidden",
   },
 } as const;
