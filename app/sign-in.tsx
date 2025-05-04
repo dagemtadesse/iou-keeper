@@ -58,9 +58,7 @@ export default function Index() {
   };
 
   return (
-    <SafeAreaView style={styles.pageContainer}>
-      <StatusBar style={"light"} />
-
+    <View style={styles.pageContainer}>
       <Header />
       {/* content */}
       <View style={{ paddingHorizontal: 12, flex: 1, paddingVertical: 16 }}>
@@ -120,13 +118,13 @@ export default function Index() {
             </View>
           ) : (
             <>
-              <Text style={typography.label.large}>Next</Text>
-              <RightArrow />
+              <Text style={[typography.label.large, {color: Colors.onPrimary}]}>Next</Text>
+              <RightArrow color={Colors.onPrimary}/>
             </>
           )}
         </FilledButton>
       </View>
-    </SafeAreaView>
+    </View>
   );
 }
 

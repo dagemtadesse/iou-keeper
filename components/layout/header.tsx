@@ -1,4 +1,4 @@
-import { View, Text } from "react-native";
+import { View, Text, ViewStyle } from "react-native";
 import { useRouter } from "expo-router";
 
 import { Logo } from "../icons/Logo";
@@ -10,25 +10,32 @@ export const Header = ({
   showTitle = true,
   title = "IOU Keeper",
   navigateToPrevious = false,
+  hideAppIcon = false,
+  children,
+  containerStyle
 }: {
   showTitle?: boolean;
   title?: string;
   navigateToPrevious?: boolean;
+  hideAppIcon?: boolean;
+  children?: React.ReactNode;
+  containerStyle?: ViewStyle;
 }) => {
   const router = useRouter();
 
   return (
     <>
-      <View style={styles.headerContainer}>
-        {navigateToPrevious ? (
-          <IconButton pressableProps={{ onPress: () => router.back() }}>
-            <LeftArrow />
-          </IconButton>
-        ) : (
-          <Logo />
-        )}
-
+      <View style={[styles.headerContainer, containerStyle]}>
+        {!hideAppIcon &&
+          (navigateToPrevious ? (
+            <IconButton pressableProps={{ onPress: () => router.back() }}>
+              <LeftArrow />
+            </IconButton>
+          ) : (
+            <Logo />
+          ))}
         {showTitle && <Text style={styles.headerText}>{title}</Text>}
+        {children}
       </View>
     </>
   );

@@ -1,9 +1,4 @@
 export const typography = {
-  bodyLarge: {
-    fontSize: 16,
-    lineHeight: 24,
-  },
-
   title: {
     large: {
       fontSize: 22,
@@ -43,7 +38,21 @@ export const typography = {
       fontSize: 14,
       lineHeight: 20,
       fontWeight: "500",
-      color: "#fff",
+    }
+  },
+
+  headline: {
+    medium:{
+      fontSize: 28,
+      lineHeight: 36,
+    },
+    large: {
+      fontSize: 32,
+      lineHeight: 40,
+    },
+    small: {
+      fontSize: 24,
+      lineHeight: 32,
     }
   }
 } as const;

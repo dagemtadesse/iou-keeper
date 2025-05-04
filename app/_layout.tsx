@@ -1,10 +1,12 @@
-import { Colors } from "@/components/theme/color";
 import { Stack } from "expo-router";
-import { View } from "react-native";
+import { StatusBar } from "expo-status-bar";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { Colors } from "@/components/theme/color";
 
 export default function Layout() {
   return (
-    <View style={{ flex: 1, backgroundColor: Colors.background }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: Colors.background }}>
+      <StatusBar style={"light"} />
       <Stack
         screenOptions={{ contentStyle: { backgroundColor: Colors.background } }}
       >
@@ -12,6 +14,6 @@ export default function Layout() {
         <Stack.Screen name="otp" options={{ headerShown: false }} />
         <Stack.Screen name="(app)" options={{ headerShown: false }} />
       </Stack>
-    </View>
+    </SafeAreaView>
   );
 }

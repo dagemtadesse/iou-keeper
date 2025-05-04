@@ -1,6 +1,4 @@
 import { View, Text } from "react-native";
-import { StatusBar } from "expo-status-bar";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { OtpInput } from "react-native-otp-entry";
 
 import { useForm, Controller } from "react-hook-form";
@@ -52,8 +50,7 @@ export default function OtpScreen() {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <StatusBar style={"light"} />
+    <View style={{ flex: 1 }}>
       <Header title="Verify OTP" navigateToPrevious />
 
       {/* main content */}
@@ -95,6 +92,6 @@ export default function OtpScreen() {
           <Text style={typography.label.large}>Verify</Text>
         </FilledButton>
       </View>
-    </SafeAreaView>
+    </View>
   );
 }
