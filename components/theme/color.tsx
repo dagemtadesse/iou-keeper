@@ -3,6 +3,7 @@ export const Colors = {
     primaryVariant: "#bebef4",
     onPrimary: "#252525",
     background: "#212529",
+    backgroundDark: '#141719',
     hover: "rgba(255, 255, 255, 0.05)",
     onBackground: "#e3e3e4",
     textVariant: "#909294",

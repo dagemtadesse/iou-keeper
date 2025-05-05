@@ -23,7 +23,7 @@ const schema = yup
   .required();
 
 export default function OtpScreen() {
-  const { handleSubmit, control, setValue } = useForm({
+  const { handleSubmit, control, setValue, watch } = useForm({
     resolver: yupResolver(schema),
   });
 
@@ -58,7 +58,7 @@ export default function OtpScreen() {
         <Text
           style={[typography.body.large, { fontWeight: 300, marginBottom: 16 }]}
         >
-          A one-time password has been sent to your registered email address.
+          A one-time password has been sent to your email address <Text style={{fontWeight: 500}}>{watch('email')}</Text>.
         </Text>
 
         <Controller

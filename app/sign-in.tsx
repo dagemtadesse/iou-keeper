@@ -44,7 +44,7 @@ export default function Index() {
 
   const onSubmit = async (data: { email: string }) => {
     try {
-      AsyncStorage.setItem(StorageKey.AUTH_EMAIL, data.email);
+      await AsyncStorage.setItem(StorageKey.AUTH_EMAIL, data.email);
       const { error } = await supabase.auth.signInWithOtp({
         email: data.email,
       });

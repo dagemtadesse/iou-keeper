@@ -1,9 +1,5 @@
-import { useEffect, useState } from "react";
 import { Text, View } from "react-native";
 
-import { supabase } from "@/lib/supabase";
-import { Session } from "@supabase/supabase-js";
-import { Redirect } from "expo-router";
 import { Colors } from "@/components/theme/color";
 import { typography } from "@/components/theme/typography";
 import { Header } from "@/components/layout/header";
@@ -11,27 +7,6 @@ import { IconButton } from "@/components/common/Button";
 import { SearchIcon } from "@/components/icons/Search";
 
 export default function Index() {
-  const [session, setSession] = useState<Session | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-
-  useEffect(() => {
-    (async () => {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-      setIsLoading(false);
-      setSession(session);
-    })();
-
-    supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-    });
-  }, []);
-
-  if (isLoading) return <Text>Loading...</Text>;
-
-  if (!session && !isLoading) return <Redirect href="/sign-in" />;
-
   return (
     <View style={{ backgroundColor: Colors.background, flex: 1 }}>
       <Header
@@ -59,7 +34,6 @@ export default function Index() {
 
         <View
           style={{
-            flexDirection: "row",
             alignItems: "stretch",
             height: 300,
             gap: 16,
@@ -72,7 +46,7 @@ export default function Index() {
               borderRadius: 8,
             }}
           ></View>
-          <View style={{ flex: 6, gap: 16 }}>
+          <View style={{ flex: 6, gap: 16, flexDirection: "row" }}>
             <View
               style={{
                 flex: 1,
